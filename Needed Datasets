@@ -1,0 +1,94 @@
+A breakdown of how you can get or construct the required datasets in CSV format for your Crop Yield Prediction project. I’ll also include direct downloadable CSV links or instructions where possible.
+
+Crop Yield Data (CSV)
+
+Kaggle Dataset (Ready CSV)
+
+Farm Yield Prediction Dataset – Kaggle
+
+After downloading the zip, you’ll get a CSV file with columns like:
+Crop, Region, Year, Yield, Rainfall, Temperature, etc.
+
+
+FAO Dataset (Download as CSV)
+
+Visit: https://www.fao.org/faostat/en/#data/QC
+
+Select countries, crops, and years
+
+Click “Download Data” and choose CSV format
+
+
+
+---
+
+Weather Data (CSV)
+
+OpenWeatherMap (Free API, Convert to CSV)
+
+Register and use their Historical Weather API
+
+Pull data by script and store it as CSV:
+
+
+import pandas as pd
+df = pd.DataFrame(weather_data)  # From API
+df.to_csv("weather_data.csv", index=False)
+
+Alternative:
+Use this NOAA historical weather exporter:
+
+NOAA Climate Data CSV Tool
+
+
+
+---
+
+NDVI Data (Convert GeoTIFF to CSV)
+
+You can extract NDVI values from Sentinel or Landsat GeoTIFF files like this:
+
+import rasterio
+import numpy as np
+import pandas as pd
+
+def ndvi_to_csv(image_path, output_csv):
+    with rasterio.open(image_path) as src:
+        red = src.read(3).astype(float)
+        nir = src.read(4).astype(float)
+        ndvi = (nir - red) / (nir + red + 1e-5)
+        flat_ndvi = ndvi.flatten()
+        df = pd.DataFrame({'NDVI': flat_ndvi})
+        df = df[df['NDVI'].notnull()]
+        df.to_csv(output_csv, index=False)
+
+ndvi_to_csv("sentinel_image.tif", "ndvi_data.csv")
+
+
+---
+
+Soil Data (Download CSV)
+
+SoilGrids:
+
+Go to https://soilgrids.org/
+
+Click on a location > View detailed data > Click CSV Download
+
+For bulk: Use https://data.isric.org and export GeoTIFF, then convert to CSV using raster reading scripts.
+
+
+
+---
+
+Need Ready CSV Files?
+
+If you'd like, I can simulate and create sample .csv files with realistic dummy data for:
+
+Crop Yield
+
+Weather
+
+NDVI values
+
+Soil properties
